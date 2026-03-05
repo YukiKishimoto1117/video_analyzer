@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.venv/
+
+# Secrets / local env
+.env
+.env.*
+!.env.example
+
+# Local runtime artifacts
+app/uploads/*
+!app/uploads/.gitkeep
+app/data/*.db
+app/data/*.sqlite*
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/

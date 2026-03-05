@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Corner Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>動画コーナー解析</h1>
+      <p>動画をアップロードすると、Whisperで文字起こししてGeminiでコーナー分類します。</p>
+
+      <form id="upload-form">
+        <input type="file" id="video-file" name="file" accept="video/*" required />
+        <button type="submit">アップロードして解析</button>
+      </form>
+
+      <p id="status"></p>
+
+      <table id="result-table" hidden>
+        <thead>
+          <tr>
+            <th>開始時間(sec)</th>
+            <th>終了時間(sec)</th>
+            <th>コーナータイトル</th>
+            <th>概要</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
