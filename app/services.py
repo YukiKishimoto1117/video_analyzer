@@ -53,7 +53,7 @@ def segment_corners(transcript: dict) -> list[dict]:
         return _fallback_segments(transcript)
 
     genai.configure(api_key=settings.gemini_api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.0-flash")
     prompt = f"{_PROMPT}\n\n文字起こし:\n{transcript}"
     response = model.generate_content(prompt)
     raw = (response.text or "").strip()
