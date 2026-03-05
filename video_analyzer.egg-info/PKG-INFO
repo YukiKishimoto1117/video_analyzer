@@ -9,7 +9,7 @@ Requires-Dist: uvicorn[standard]>=0.30.0
 Requires-Dist: python-multipart>=0.0.9
 Requires-Dist: sqlalchemy>=2.0.32
 Requires-Dist: pydantic-settings>=2.4.0
-Requires-Dist: whisper>=1.1.10
+Requires-Dist: openai-whisper>=20240930
 Requires-Dist: google-generativeai>=0.7.2
 Requires-Dist: ffmpeg-python>=0.2.0
 Requires-Dist: jinja2>=3.1.4
@@ -22,9 +22,10 @@ Requires-Dist: httpx>=0.27.0; extra == "dev"
 動画をアップロードすると、以下の流れでコーナー分析します。
 
 1. Whisperで音声を文字起こし
-2. Gemini APIで文字起こし内容をコーナー単位に分類
-3. コーナー情報（開始秒・終了秒・タイトル・概要）をSQLiteへ保存
-4. フロント画面で表形式表示
+2. Whisperセグメント（start/end/text）を抽出し、境界候補を作成
+3. Gemini APIでセグメント情報をもとにコーナー分類
+4. コーナー情報（開始秒・終了秒・タイトル・概要）をSQLiteへ保存
+5. フロント画面で表形式表示
 
 ## 想定アーキテクチャ
 
@@ -71,7 +72,11 @@ uvicorn app.main:app --reload
 ## 環境変数
 
 - `GEMINI_API_KEY`: Gemini APIキー（未設定時はフォールバックで全体を1コーナーとして保存）
-- `WHISPER_MODEL`: Whisperモデル名（例: `base`, `small`）
+- `GEMINI_MODEL`: Geminiモデル名（環境に合わせて変更）
+- `WHISPER_MODEL`: Whisperモデル名（推奨: `small` 以上）
+- `WHISPER_LANGUAGE`: `auto`（自動判定）または `ja` など
+- `WHISPER_BEAM_SIZE` / `WHISPER_BEST_OF` / `WHISPER_TEMPERATURE`: 文字起こし精度調整
+- `MIN_CORNER_SEC` / `MERGE_GAP_SEC`: コーナー境界の後処理パラメータ
 - `DATABASE_URL`: DB接続文字列
 
 ## 今後の改善案
