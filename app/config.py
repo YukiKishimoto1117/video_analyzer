@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     whisper_best_of: int = 5
     whisper_temperature: float = 0.0
 
+    whisper_chunk_sec: float = 60.0
+    whisper_overlap_sec: float = 8.0
+    whisper_parallel_workers: int = 3
+
     min_corner_sec: float = 20.0
     merge_gap_sec: float = 2.0
 

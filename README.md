@@ -57,8 +57,39 @@ uvicorn app.main:app --reload
 - `WHISPER_MODEL`: Whisperモデル名（推奨: `small` 以上）
 - `WHISPER_LANGUAGE`: `auto`（自動判定）または `ja` など
 - `WHISPER_BEAM_SIZE` / `WHISPER_BEST_OF` / `WHISPER_TEMPERATURE`: 文字起こし精度調整
+- `WHISPER_CHUNK_SEC` / `WHISPER_OVERLAP_SEC` / `WHISPER_PARALLEL_WORKERS`: チャンク分割・オーバーラップ・並列数
 - `MIN_CORNER_SEC` / `MERGE_GAP_SEC`: コーナー境界の後処理パラメータ
 - `DATABASE_URL`: DB接続文字列
+
+## 今後の改善案
+
+- 非同期ジョブ化（Celery / RQ）で長時間処理をバックグラウンド化
+- FFmpegで音声抽出を先に実行してWhisper処理時間を短縮
+- Gemini出力JSONの厳格バリデーション
+- ユーザー認証・履歴画面追加
+
+
+## APIキー管理（重要）
+
+Gemini APIキーは**フロント（HTML/JavaScript）に書かない**でください。  
+ブラウザに配信されるコードにキーを書くと、誰でも閲覧できてしまいます。
+
+このリポジトリでは、`app/config.py` が `.env` を読み込むため、以下の運用が安全です。
+
+1. `.env.example` をコピーして `.env` を作成
+2. `.env` の `GEMINI_API_KEY=` に本物のキーを設定
+3. `.env` は `.gitignore` で除外されるため、`git add .` しても通常はコミットされない
+
+```bash
+cp .env.example .env
+# .env を開いて GEMINI_API_KEY=... を設定
+```
+
+### 追加の注意点
+
+- APIキーはサーバー側（FastAPI）だけで使用し、クライアント側には返さない。
+- もしキーを誤ってコミットしたら、**即時ローテーション（再発行）**してください。
+- 本番環境では `.env` ではなく、クラウドのシークレット管理（Secret Manager, Parameter Store等）を推奨します。
 
 ## 今後の改善案
 
